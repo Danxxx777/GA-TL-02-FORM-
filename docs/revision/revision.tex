@@ -1,0 +1,42 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{array}
+\title{GA-TL-02: Revisión de diseño de CLAB}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Estado del documento}
+Esqueleto de preparación. La revisión con el docente y la integración de la tabla de servicios están pendientes. Este archivo no es la entrega final.
+
+\section*{Preparación de la revisión}
+Las respuestas se elaborarán a partir del diagrama y las decisiones acordadas por el equipo.
+\begin{enumerate}
+\item ¿Qué ocurre si cae un servicio durante una operación y cómo se recupera?
+\item ¿Qué responsabilidad y datos pertenecen a cada servicio? ¿Por qué mantener separados dos servicios relacionados?
+\item ¿Cómo se mantiene la consistencia entre bases de datos y se evitan operaciones duplicadas?
+\item ¿Qué canales son sincrónicos o asincrónicos y qué requisito justifica la tecnología elegida?
+\item ¿Qué sucede si falla el API Gateway o el mecanismo de mensajería propuesto?
+\end{enumerate}
+
+\section*{Tabla de retroalimentación}
+Sin observaciones registradas: la revisión con el docente está pendiente. Las filas se completarán únicamente con lo ocurrido en esa revisión.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{|p{0.29\linewidth}|p{0.29\linewidth}|p{0.29\linewidth}|}
+\hline
+\textbf{Observación} & \textbf{Cambio realizado en el diagrama} & \textbf{Razón si no se aplicó} \\
+\hline
+\rule{0pt}{2cm} & & \\
+\hline
+\end{tabular}
+\end{center}
+
+\section*{Asistencia utilizada}
+Estructura inicial y preguntas de preparación elaboradas con asistencia de OpenAI Codex. No se ha realizado ni simulado la revisión docente.
+\end{document}
