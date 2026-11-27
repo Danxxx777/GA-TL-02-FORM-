@@ -1,0 +1,26 @@
+# ADR-005 — Usar RabbitMQ para eventos de auditoría y avisos
+
+- **Estado** Propuesto
+- **Fecha** 2026-11-27
+- **Autor** Diego
+- **Revisado por** Pendiente de revisión del equipo
+
+## Contexto
+
+El ADR-002 propone una cola para los avisos diferidos. El taller incorpora RF-12 y requiere que RNF-04 cubra cada cambio de estado y de puntaje, incluso cuando el consumidor de auditoría esté temporalmente fuera de servicio.
+
+## Opciones consideradas
+
+1. RabbitMQ con una cola duradera por consumidor. Permite confirmaciones, reintentos y entrega independiente a auditoría y notificaciones.
+2. Kafka con grupos de consumidores. Permite releer eventos retenidos y exige acordar retención, particionado y gestión de offsets.
+3. HTTP síncrono. Acopla la ejecución del cambio a la disponibilidad de sus consumidores o exige un mecanismo adicional de reenvío.
+
+## Decisión
+
+Usar RabbitMQ para CH-10 a CH-14 con mensajes persistentes y confirmación de publicación. Postulaciones y evaluación registran el evento en una bandeja de salida dentro de la misma transacción que confirma el cambio en su base. Un publicador lo reintenta hasta que el broker lo confirme. Añadir `evaluacion.puntaje_cambiado.v1` en CH-11, además de `evaluacion.evaluacion_terminada.v1`. Los eventos de cambio incluyen identificador y los cinco datos de RNF-04. Auditoría confirma la recepción después de persistir el registro y deduplica por identificador. Notificaciones usa su propia cola y las rutas de eventos relevantes.
+
+## Consecuencias
+
+La disponibilidad del historial es eventual. La confirmación del cambio compromete su registro en la bandeja de salida. Se requieren reintentos acotados en los consumidores y una cola de mensajes fallidos para investigar y reprocesar. Verificar que cambios hechos con el broker detenido lleguen al recuperarse, que los consumidores retomen el procesamiento y que eventos repetidos no dupliquen registros. Actualizar también la tabla de servicios y el diagrama para reflejar el evento de puntaje.
+
+[ADR-002 de E1](https://github.com/Johnst2000/ta-pfc-e1-ssdc-distribuido/blob/abc1834642c43210abb105471f87c7e7ad690fb7/docs/adr/ADR-002.md) · [RNF de E1](https://github.com/Johnst2000/ta-pfc-e1-ssdc-distribuido/blob/abc1834642c43210abb105471f87c7e7ad690fb7/docs/secciones/06_requisitos_rnf.tex)
