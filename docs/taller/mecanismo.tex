@@ -1,0 +1,42 @@
+% Fragmento incluido desde docs/main.tex.
+\noindent Diseño propuesto para GA-TL-02. Los RNF se citan según la sección 06 de E1.
+Los canales de avisos se justifican por sus RF y por el ADR-002, que permite la entrega diferida.
+Las metas de desempeño de E1 requieren pruebas. En este taller se propone HTTP con tiempos de espera acotados sin atribuirle resultados de PE-U1.
+
+{\footnotesize
+\begin{longtable}{@{}p{1.3cm}p{4.0cm}p{2.6cm}p{7.6cm}@{}}
+\caption{Canales y mecanismos de comunicación del SSDC}\\
+\toprule
+\textbf{Canal} & \textbf{Origen y destino} & \textbf{Tipo y tecnología} & \textbf{Justificación} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Canal} & \textbf{Origen y destino} & \textbf{Tipo y tecnología} & \textbf{Justificación} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+CH-01 & Web y móvil $\to$ \path|api-gateway| & Síncrono \newline REST/HTTPS & RNF-02 y RNF-06. Validar identidad y rol en rutas protegidas y devolver un resultado inmediato de la carga o consulta al cliente. \\
+CH-02 & \path|api-gateway| $\to$ \path|ms-postulaciones| & Síncrono \newline REST/HTTPS & RNF-01 y RNF-02. Consultar estados con tiempo de espera acotado y exigir rol en las rutas protegidas. La meta de latencia excluye la carga del PDF. \\
+CH-03 & \path|api-gateway| $\to$ \path|ms-evaluacion| & Síncrono \newline REST/HTTPS & RNF-01 y RNF-02. Acotar la espera de la visualización de matrices y proteger el acceso a puntajes. La meta de latencia de matrices excluye la generación de informes. \\
+CH-04 & \path|api-gateway| $\to$ \path|ms-convocatorias| & Síncrono \newline REST/HTTPS & RNF-02. Exigir rol autorizado al tramitar informes con puntajes y devolver el resultado de la operación al cliente. \\
+CH-05 & \path|api-gateway| $\to$ \path|ms-auditoria| & Síncrono \newline REST/HTTPS & RNF-02 y RF-12. Restringir al administrador la consulta del historial que contiene cambios de puntajes y estados. \\
+CH-06 & \path|api-gateway| $\to$ \path|ms-notificaciones| & Síncrono \newline REST/HTTPS & RNF-02 y RF-03/RF-07. Consultar avisos bajo la identidad autorizada cuando contengan estados protegidos. \\
+CH-07 & \path|api-gateway| $\to$ \path|ms-ia| & Síncrono \newline REST/HTTPS & RNF-02 y RF-13. Limitar la generación al rol autorizado y resguardar las credenciales de los proveedores. Devolver error si vence el tiempo de espera. \\
+CH-08 & \path|ms-evaluacion| $\to$ \path|ms-postulaciones| & Síncrono \newline REST/HTTPS & RNF-02 y RF-04. Autenticar al servicio que consulta el expediente. Si faltan los datos de postulación, informar el fallo y dejar pendiente la comprobación. \\
+CH-09 & \path|ms-postulaciones| $\to$ Supabase Storage & Síncrono \newline REST/HTTPS & RNF-05 y RNF-02. Confirmar el almacenamiento privado de la hoja de vida antes de confirmar la carga y comprobar su lectura después de reiniciar el servicio. \\
+CH-10 & \path|ms-convocatorias| $\to$ \path|RabbitMQ| & Asíncrono \newline RabbitMQ & ADR-002 y RNF-02. Publicar el evento de convocatoria sin esperar a los consumidores. Autenticar al publicador y guardar las credenciales del broker fuera del repositorio. \\
+CH-11 & \path|ms-evaluacion| $\to$ \path|RabbitMQ| & Asíncrono \newline RabbitMQ & RNF-04. Publicar un evento por cada cambio de puntaje con responsable, fecha y hora, valor anterior, valor nuevo y motivo. \\
+CH-12 & \path|ms-postulaciones| $\to$ \path|RabbitMQ| & Asíncrono \newline RabbitMQ & RNF-04. Publicar cada cambio de estado con los cinco datos de auditoría. El evento de recepción también puede generar avisos. \\
+CH-13 & \path|RabbitMQ| $\to$ \path|ms-auditoria| & Asíncrono \newline RabbitMQ & RNF-04. Usar una cola duradera propia y confirmar el mensaje tras guardar el registro. Deduplicar por identificador de evento. \\
+CH-14 & \path|RabbitMQ| $\to$ \path|ms-notificaciones| & Asíncrono \newline RabbitMQ & ADR-002, RNF-02 y RF-03/RF-07. Procesar los avisos en una cola propia con acceso restringido y registrar su estado ante fallos. \\
+CH-15 & \path|ms-auditoria| $\to$ Google Drive & Síncrono \newline REST/HTTPS & RNF-04. Respaldar registros con sus metadatos y comprobar el resultado de la carga. La consulta de auditoría usa la base del servicio. \\
+CH-16 & \path|ms-notificaciones| $\to$ Correo & Síncrono \newline REST/HTTPS & RNF-02 y RF-03/RF-07. Proponer una API de correo autenticada. Mantener las credenciales fuera del repositorio y dirigir la consulta de datos protegidos al SSDC. \\
+CH-17 & \path|ms-ia| $\to$ Proveedores externos & Síncrono \newline REST/HTTPS & RNF-02 y RF-13. Proteger las credenciales del proveedor y limitar la entrada a datos de difusión. Acotar la espera y devolver un error si falla la generación. \\
+\end{longtable}
+}
+
+\noindent Una evaluación terminada puede agrupar varios cambios, así que el evento de cierre por sí solo no cubre RNF-04. Se propone añadir el evento \path|evaluacion.puntaje_cambiado.v1| al CH-11 para registrar cada modificación. Los avisos consumen los eventos pertinentes mediante su propia cola. Véase ADR-005.
+
+\medskip
+\noindent Fuentes de E1. Sección 06 (RNF), sección 09 (comunicación) y ADR-002 (HTTP y cola de mensajes).
