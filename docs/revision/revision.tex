@@ -1,24 +1,12 @@
-\documentclass[11pt,a4paper]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage[spanish]{babel}
-\usepackage[margin=2.5cm]{geometry}
-\usepackage{array}
-\title{GA-TL-02: Revisión de diseño de CLAB}
-\author{}
-\date{}
-\begin{document}
-\maketitle
-
 \section*{Estado del documento}
-Esqueleto de preparación. La revisión con el docente y la integración de la tabla de servicios están pendientes. Este archivo no es la entrega final.
+Esqueleto de preparación. La revisión con el docente está pendiente. La tabla de servicios se integra desde el archivo de la parte 2. Este archivo no es la entrega final.
 
 \section*{Preparación de la revisión}
 Las respuestas se elaborarán a partir del diagrama y las decisiones acordadas por el equipo.
 \begin{enumerate}
-\item ¿Qué ocurre si cae un servicio durante una operación y cómo se recupera?
+\item ¿Qué ocurre si ms-evaluacion deja de responder al consultar una postulación? ¿Qué respuesta recibe el usuario y cómo se recupera la operación?
 \item ¿Qué responsabilidad y datos pertenecen a cada servicio? ¿Por qué mantener separados dos servicios relacionados?
-\item ¿Cómo se mantiene la consistencia entre bases de datos y se evitan operaciones duplicadas?
+\item Si una evaluación termina y el aviso falla, ¿cómo se conserva el resultado y se recupera la notificación? ¿Cómo se evitan duplicados en auditoría y notificaciones?
 \item ¿Qué canales son sincrónicos o asincrónicos y qué requisito justifica la tecnología elegida?
 \item ¿Qué sucede si falla el API Gateway o el mecanismo de mensajería propuesto?
 \end{enumerate}
@@ -39,4 +27,3 @@ Sin observaciones registradas: la revisión con el docente está pendiente. Las 
 
 \section*{Asistencia utilizada}
 Estructura inicial y preguntas de preparación elaboradas con asistencia de OpenAI Codex. No se ha realizado ni simulado la revisión docente.
-\end{document}

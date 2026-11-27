@@ -1,0 +1,19 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=1.8cm]{geometry}
+\usepackage{url,longtable,booktabs,array}
+\title{GA-TL-02: Arquitectura de microservicios del SSDC}
+\author{Equipo: Coronel, Silva, Giraldo y Loor}
+\date{Borrador de integración}
+\begin{document}
+\maketitle
+\section*{Alcance}
+Sistema de Selección Docente y Convocatorias de la UTEQ. Documento de trabajo para integrar las partes del taller. No acredita la revisión docente ni una entrega completa.
+\section*{Servicios y requisitos}
+\input{taller/tabla_servicios}
+\section*{Mecanismos de comunicación}
+\IfFileExists{taller/mecanismos.tex}{\input{taller/mecanismos}}{Pendiente de incorporación por el responsable de la parte 3.}
+\input{revision/revision}
+\end{document}

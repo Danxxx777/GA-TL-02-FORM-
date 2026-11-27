@@ -1,6 +1,6 @@
 # GA-TL-02 - Diseño de Arquitectura de Microservicios para el PFC
 
-Esqueleto inicial de la parte 4: revisión de diseño y entrega. Sistema de referencia: SSDC (Sistema de Selección Docente y Convocatorias, UTEQ), tomado de la entrega 1 del equipo.
+Base de integración de la parte 4: revisión de diseño y entrega. Sistema de referencia: SSDC (Sistema de Selección Docente y Convocatorias, UTEQ), tomado de la entrega 1 del equipo.
 
 ## Integrantes
 
@@ -16,7 +16,7 @@ Esqueleto inicial de la parte 4: revisión de diseño y entrega. Sistema de refe
 Esta versión organiza el trabajo pendiente. No constituye una entrega final ni acredita una revisión con el docente.
 
 - [ ] Incorporar el diseño C4 nivel 3 acordado por el equipo.
-- [x] Tabla de servicios y su correspondencia con requisitos funcionales, subida en `docs/taller/tabla_servicios.tex` (falta integrarla en el documento LaTeX).
+- [x] Tabla de servicios y su correspondencia con requisitos funcionales, subida en `docs/taller/tabla_servicios.tex` (integrada mediante `docs/main.tex`).
 - [ ] Incorporar la fotografía real del bosquejo del equipo, con fecha visible.
 - [ ] Preparar y realizar la revisión de diseño de 10 minutos.
 - [ ] Registrar las observaciones reales y actualizar el diagrama.
@@ -26,11 +26,13 @@ Esta versión organiza el trabajo pendiente. No constituye una entrega final ni 
 
 ## Organización prevista
 
-- `/docs/revision/revision.tex`: base de la tabla de retroalimentación y preguntas de preparación.
+- `/docs/main.tex`: documento principal de integración.
+- `/docs/revision/planificacion.md`: secuencia de trabajo, dependencias y verificación.
+- `/docs/revision/revision.tex`: fragmento con la base de la tabla de retroalimentación y preguntas de preparación.
 - `/docs/taller/tabla_servicios.tex`: tabla de servicios y requisitos (parte 2).
 - `/docs/diagramas/`: destino del diagrama editable y su exportación, cuando estén disponibles.
 - `/docs/adr/`: destino de las decisiones de arquitectura que correspondan.
-- `/evidencias/`: destino de la fotografía auténtica del bosquejo.
+- `/docs/diagramas/bosquejo_inicial_AAAA-MM-DD.jpg`: destino previsto de la fotografía auténtica del bosquejo.
 
 Las carpetas pendientes se incorporarán al añadir sus archivos reales.
 
@@ -45,3 +47,9 @@ Cierre indicado en la guía: 28 de noviembre de 2026, 23:55 (America/Guayaquil).
 ## Participación y asistencia
 
 Este esqueleto fue preparado con asistencia de OpenAI Codex por solicitud de Byron Daniel Loor Mendoza. No incluye observaciones docentes, evidencias de ejecución ni aportes atribuidos a otros integrantes. Cada integrante debe realizar sus propios commits sobre su trabajo real.
+
+## Compilación del documento de trabajo
+
+Desde `docs/`, ejecutar `pdflatex -interaction=nonstopmode -halt-on-error main.tex` dos veces. El documento integra la tabla de servicios y la revisión; incorporará `taller/mecanismos.tex` cuando su responsable lo añada. Mientras falten componentes, el PDF se identifica como borrador.
+
+Fuente técnica del SSDC: https://github.com/Johnst2000/ta-pfc-e1-ssdc-distribuido
