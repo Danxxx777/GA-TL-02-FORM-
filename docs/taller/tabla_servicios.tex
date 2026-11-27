@@ -1,0 +1,86 @@
+% Parte 2 - Tabla de servicios y requisitos (SSDC). Fragmento: se incluye con \input desde main.tex.
+% Requiere: booktabs, longtable, array y url (\usepackage{url}) para que las rutas largas se partan en la celda.
+% Nombres de servicio segun la convencion ms-<dominio> de la guia del equipo
+% (en el repositorio de E1 se llaman convocatorias, postulaciones, evaluacion, notificaciones, auditoria, ia).
+% Marca (impl.) = endpoint ya implementado en el esqueleto de src/. Lo demas es PROPUESTA de diseno.
+{\footnotesize
+\begin{longtable}{@{}p{3.2cm}p{2.6cm}p{2.7cm}p{4.8cm}p{1.7cm}@{}}
+\caption{Tabla de servicios del SSDC y requisitos funcionales que atienden}\\
+\toprule
+\textbf{Servicio} & \textbf{Responsabilidad} & \textbf{Datos que le pertenecen} & \textbf{Endpoints o eventos principales} & \textbf{RF que atiende} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Servicio} & \textbf{Responsabilidad} & \textbf{Datos que le pertenecen} & \textbf{Endpoints o eventos principales} & \textbf{RF que atiende} \\
+\midrule
+\endhead
+\path|ms-convocatorias| &
+Administrar las convocatorias y el tr\'amite de aprobaci\'on del informe ante los consejos. &
+Convocatorias, su estado y las instancias de aprobaci\'on. Base: \path|db-convocatorias|. &
+\path|GET /api/v1/convocatorias| (impl.) \newline
+\path|POST /api/v1/convocatorias/:id/publicar| (impl.) \newline
+\path|POST /api/v1/convocatorias/:id/tramite| \newline
+Publica \path|convocatorias.convocatoria_publicada.v1| &
+RF-10 \\
+\midrule
+\path|ms-postulaciones| &
+Recibir y guardar las postulaciones con su hoja de vida y mostrar su estado. &
+Postulantes, expediente en PDF (referencia a Storage) y estado de la postulaci\'on. Base: \path|db-postulaciones|. &
+\path|POST /api/v1/postulaciones| \newline
+\path|GET /api/v1/convocatorias/:id/postulaciones| \newline
+\path|GET /api/v1/postulaciones/:id/estado| \newline
+Publica \path|postulaciones.postulacion_recibida.v1| y \path|postulaciones.estado_cambiado.v1| &
+RF-01, RF-02, RF-03 \\
+\midrule
+\path|ms-evaluacion| &
+Evaluar a los postulantes: requisitos m\'inimos, matriz de m\'eritos, entrevista, ranking e informe. &
+Matriz y puntajes por criterio, entrevistas, total, ranking y marca de cumplimiento. Base: \path|db-evaluacion|. &
+\path|PUT /api/v1/evaluaciones/:id/criterios| \newline
+\path|GET /api/v1/evaluaciones/:id/total| \newline
+\path|POST /api/v1/entrevistas| \newline
+\path|GET /api/v1/convocatorias/:id/ranking| \newline
+\path|POST /api/v1/convocatorias/:id/informe| \newline
+Publica \path|evaluacion.evaluacion_terminada.v1|; consulta a \path|ms-postulaciones| &
+RF-04, RF-05, RF-06, RF-07, RF-08, RF-09 \\
+\midrule
+\path|ms-notificaciones| &
+Avisar a los usuarios los cambios de estado y las citaciones. &
+Avisos generados y su estado de env\'io (enviado o pendiente). Base: \path|db-notificaciones|. &
+\path|GET /api/v1/notificaciones| (impl. como \path|GET /notificaciones|) \newline
+\path|POST /api/v1/notificaciones| (impl. como \path|POST /notificaciones|) \newline
+Consume los eventos de postulaciones, evaluaci\'on y convocatorias &
+RF-03, RF-07 (aviso) \\
+\midrule
+\path|ms-auditoria| &
+Registrar los cambios de puntaje y de estado, y respaldarlos. &
+Registros de cambio con hash y respaldos. Base: \path|db-auditoria|. &
+\path|GET /api/v1/auditoria| \newline
+Consume todos los eventos del sistema &
+RF-12 (nuevo); tambi\'en RNF-04 \\
+\midrule
+\path|ms-ia| &
+Generar textos e im\'agenes asistidos con proveedores externos de IA. &
+Solicitudes de generaci\'on y su resultado. Base: \path|db-ia|. &
+\path|POST /api/v1/ia/generaciones| &
+RF-13 (nuevo) \\
+\midrule
+\path|api-gateway| (borde) &
+Puerta \'unica de entrada: enrutar, autenticar (valida el token y el rol que trae) y limitar solicitudes. &
+Ninguno (sin estado de negocio). &
+Rutas \path|/api/v1/*| hacia cada servicio &
+RF-11 (acceso por rol) \\
+\bottomrule
+\end{longtable}
+}
+
+\noindent\textbf{Requisitos nuevos acordados por el equipo} (redacci\'on aprobada por el equipo):
+\begin{itemize}
+\item \textbf{RF-12.} Como \textbf{administrador}, quiero consultar el registro de cambios de puntajes y estados (qui\'en, cu\'ando, valor anterior y nuevo), para verificar que las evaluaciones no fueron alteradas.
+\item \textbf{RF-13.} Como \textbf{Coordinadora}, quiero generar con ayuda de IA el borrador del texto y la imagen de difusi\'on de una convocatoria, para no redactarlos desde cero.
+\end{itemize}
+
+\noindent\textbf{Verificaci\'on de cobertura (contra RF-01 a RF-13).}
+\begin{itemize}
+\item Requisitos sin servicio: ninguno. RF-04, RF-09 y RF-10 se asignaron por acuerdo del equipo; RF-12 y RF-13 son nuevos y los atienden \path|ms-auditoria| y \path|ms-ia|; RF-11 lo atiende el \path|api-gateway|.
+\item Servicios sin requisito funcional: ninguno.
+\end{itemize}
