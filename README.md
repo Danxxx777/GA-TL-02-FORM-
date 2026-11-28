@@ -50,7 +50,7 @@ Este esqueleto fue preparado con asistencia de OpenAI Codex por solicitud de Byr
 
 ## Compilación del documento de trabajo
 
-Desde `docs/`, ejecutar `pdflatex -interaction=nonstopmode -halt-on-error main.tex` dos veces. El documento integra la tabla de servicios y la revisión; incorporará `taller/mecanismos.tex` cuando su responsable lo añada. Mientras falten componentes, el PDF se identifica como borrador.
+Desde `docs/`, ejecutar `pdflatex -interaction=nonstopmode -halt-on-error main.tex` dos veces. El documento integra la tabla de servicios y la revisión; integra los mecanismos desde `taller/mecanismo.tex`. Mientras falten componentes, el PDF se identifica como borrador.
 
 Fuente técnica del SSDC: https://github.com/Johnst2000/ta-pfc-e1-ssdc-distribuido
 
